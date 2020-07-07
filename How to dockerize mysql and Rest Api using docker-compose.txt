@@ -1,0 +1,78 @@
+Step 1 Organize folder
+1. Create a new folder named docker-build in C:\Users\[EMP_ID] folder. This will be the root folder for all the components that we are going to dockerize. 
+
+
+Step 2 
+Copy all project folders in this new folder. The list of projects are provided below for quick reference: 
+2.1 dbscript - This folder should contain the schema creation script for 'dailysharprice' database.
+2.2 dailyshareprice - This is the microservice project that handles services related to share prices
+
+
+Step 3
+Containerize Mysql
+Steps to setup MySQL container 
+3.1 Create a file named docker-compose.yml file in docker-build folder 
+3.2 Ensure that the schema creation SQL file is placed in the dbscripts folder 
+3.3 Include the following configuration in the docker-compose.yml: 
+version: '3' 
+services: 
+  equity-mysql: 
+    image: mysql:8.0.18 
+    ports: 
+      - "3306:3306" 
+    environment: 
+      - MYSQL_ROOT_PASSWORD=root 
+    volumes: 
+      - e:/equitydb:/var/lib/mysql 
+      - ./dbscripts:/docker-entrypoint-initdb.d 
+
+
+Step 4
+Make the following changes in the application.properties file of dailyshareprice project
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+spring.datasource.url=jdbc:mysql://192.168.99.100:3306/market?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+spring.datasource.username=root
+spring.datasource.password=root
+
+Step 4
+To link dailyshareprice with MySql database follow the below steps
+4.1 Build jar file by right click project ->run as->maven build-> in the goal enter 'clean package'.
+
+4.1 Create a file named 'Dockerfile' in the dailyshareprice project folder with the below specified content 
+FROM openjdk:8-jdk-alpine 
+COPY target/dailyshareprice-0.0.1-SNAPSHOT.jar app.jar 
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom -Djava.net.preferIPv4Stack=true","-jar","/app.jar"] 
+
+4.2 Modify docker-build\docker-compose.yml so that the entire file content looks like the one below. Ideally dailyshareprice had been added in the file:
+ 
+version: '3' 
+services: 
+  equity-mysql: 
+    image: mysql:8.0.18 
+    ports: 
+      - "3306:3306" 
+    environment: 
+      - MYSQL_ROOT_PASSWORD=root 
+    volumes: 
+      - e:/equitydb:/var/lib/mysql 
+      - ./dbscripts:/docker-entrypoint-initdb.d 
+ 
+  dailyshareprice: 
+    image: dailyshareprice-app 
+    build: dailyshareprice/. 
+    ports: 
+      - 8080:8080 
+    depends_on: 
+      - equity-mysql 
+    links: 
+      - equity-mysql 
+
+Step 5
+5.1 Execute 'docker-compose up' command in docker-build folder. This will start mysql server and dailyshareprice 
+5.2 Test the http://localhost:8080/shares REST API using Postman or curl command 
+
+
+
+
