@@ -1,0 +1,30 @@
+How to dockerize Spring Rest Webservice
+
+Step 1: Build jar file of the spring rest webservice project
+1.In Eclipse, go to windows->preferences->Java->Installed JRE->remove JRE and Add JDK
+2.In the pom.xml have the following entry below  <version></version>
+		<packaging>jar</packaging>
+3.Right click the project->Run As->Maven build, in the window enter 'clean package' for goals and click Run
+4.In the console you can find the location where jar file is available.
+
+Step 2: Create Docker image
+1. Create a file named Dockerfile inside project by right click the project folder click new and file.
+2. Open the Dockerfile and enter the following  commands
+FROM openjdk:8-jdk-alpine
+ADD target/spring-rest2-0.0.1-SNAPSHOT.jar spring-rest2-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["sh","-c","java -jar /spring-rest2-0.0.1-SNAPSHOT.jar"]
+
+3. Open Docker Quickstart Terminal by click it.
+
+4.In the docker command prompt, go to the project folder by using cd command
+5.Execute the following command in the docker command prompt.
+docker build -t spring-rest-api1:dockerfile1 .
+Now the docker image is created successfully.
+
+Step 3 Run the created docker image
+1.Execute the following docker command to run the image
+docker run -p 8080:8080 spring-rest-api1:dockerfile1
+
+
+
+

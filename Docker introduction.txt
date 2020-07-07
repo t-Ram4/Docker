@@ -1,0 +1,48 @@
+What is docker?
+Docker is a tool which is used to automate the deployment of applications in lightweight containers so that applications can work efficiently in different environments.
+
+Architecture
+It has Docker client and Docker engine
+
+Where from download
+Download and install docker toolbox from the website https://docs.docker.com/toolbox/overview/
+
+Docker Registry
+hub.docker.com is a docker registry. It contains repository of docker images.
+
+
+Examples of some docker images can be
+JDK 
+Tomcat server
+Mysql
+application war etc
+
+Image and container
+A docker image is like a template or Java class and docker container is like a Java object. A running version of a docker image is called container.
+
+containerization 
+Packaging all the dependencies of an application in to container is called containerization.
+
+Docker hub
+https://hub.docker.com/
+It is a docker registry.It is repository of docker images. It also contains offical images such as Jdk, Tomcat server, mysql etc in public repository.
+ 
+Dockerization of applications
+
+Step 1
+Create (build) docker image
+
+Step 2
+
+Run the created docker image
+
+Note:
+If you are using Window 10 and are using docker toolbox
+
+=> Use 192.168.99.100 instead of localhost.
+
+
+
+
+
+

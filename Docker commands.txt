@@ -1,0 +1,45 @@
+
+Docker commands
+
+1. To download an image from docker hub
+
+docker pull imagename
+
+2. To start a container of an image
+
+docker run imagename
+
+3. To display the list of images in the local drive
+
+docker images
+
+4. To remove a image from our local drive
+
+docker image remove imageId
+
+5.To stop a container gracefully
+
+docker container stop containerId
+
+6.To remove  stopped containers from local drive
+
+docker container prune
+
+7.To display the list of all containers in local drive
+
+docker container ls -a
+
+8. To display the list of running containers 
+
+docker container ls
+
+9. To create docker image from docker file
+
+docker build -t anyname:anytagname .
+
+10. To run the docker image on a port number 8080
+docker run -p 8080:8080 imagename:tagname
+
+11. How to pull and run nginx webserver
+docker container run --publish 80:80 nginx
+and go to the browser use the url http://192.168.99.100/
